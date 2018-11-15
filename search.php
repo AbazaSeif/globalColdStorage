@@ -3,7 +3,7 @@ require 'dbconnection.php';
  
 if(isset($_REQUEST["term"])){
     // Prepare a select statement
-    $sql = "SELECT * FROM storage_info WHERE location LIKE ?";
+    $sql = "SELECT * FROM storage_info WHERE storage_location LIKE ?";
     
     if($stmt = mysqli_prepare($dbconnect, $sql)){
         // Bind variables to the prepared statement as parameters
@@ -20,7 +20,7 @@ if(isset($_REQUEST["term"])){
             if(mysqli_num_rows($result) > 0){
                 // Fetch result rows as an associative array
                 while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-                    echo "<p>" . $row["location"] . "</p>";
+                    echo "<p>" . $row["storage_location"] . "</p>";
                 }
             } else{
                 echo "<p>No matches found</p>";

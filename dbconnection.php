@@ -1,12 +1,12 @@
 <?php
 
 //error handling for database connection
-set_error_handler("databaseError",E_ALL);
-function databaseError($errno, $errstr)
-{
-	echo "No Database Connection.";
-	die();
-}
+// set_error_handler("databaseError",E_ALL);
+// function databaseError($errno, $errstr)
+// {
+// 	echo "No Database Connection.";
+// 	die();
+// }
 
 //database connection variable
 $host = "localhost";

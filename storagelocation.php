@@ -9,7 +9,7 @@ if (isset($_GET['name']) == '') {
 
 if (isset($_GET)) {
     $location = mysqli_real_escape_string($dbconnect, $_GET['name']);
-    $sqlQuery = "SELECT * FROM `storage_info` WHERE `location` = '$location'";
+    $sqlQuery = "SELECT * FROM `storage_info` WHERE `storage_location` = '$location'";
     $result= mysqli_query($dbconnect, $sqlQuery);
     $rows = mysqli_fetch_assoc($result);
     if ($rows) {
@@ -49,7 +49,7 @@ if(isset($product_type) == NULL || isset($payment) == NULL || isset($contact) ==
     <!-- Main Stylesheet File -->
     <link href="css/style.css" rel="stylesheet">
     
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="js/jquery-1.12.4.min.js"></script>
     
 
 </head>

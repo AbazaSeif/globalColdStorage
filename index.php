@@ -22,7 +22,7 @@
     <!-- Main Stylesheet File -->
     <link href="css/style.css" rel="stylesheet">
     
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('.search-box input[type="text"]').on("keyup input", function(){
@@ -51,6 +51,11 @@
 
 <body>
     <div id="preloader"></div>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="client_reg.php" id="client">Client Login/Registration</a>
+        <a href="owner_reg.php" id="owner">Owner Login/Registration</a>
+    </div>
 
     <!--==========================
     Hero Section
