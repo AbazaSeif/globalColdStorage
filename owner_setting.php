@@ -8,11 +8,12 @@ if (!isset($_SESSION['owner_login'])) {
 
 $ownerEmail = $_SESSION['owner_login'];
 
-$sqlquery1 = "SELECT `storage_name`, `storage_location` FROM `storage_reg_owner` WHERE `owner_email` = '$ownerEmail'";
+$sqlquery1 = "SELECT `storage_name`, `storage_location`, `owner_contact` FROM `storage_reg_owner` WHERE `owner_email` = '$ownerEmail'";
 $result1 = mysqli_query($dbconnect, $sqlquery1);
 $row = mysqli_fetch_assoc($result1);
-$storage_name = $row['storage_name'];
-$storage_location = $row['storage_location'];
+$storage_name       = $row['storage_name'];
+$storage_location   = $row['storage_location'];
+$owner_contact      = $row['owner_contact'];
 
 ?>
 <!DOCTYPE html>
@@ -57,7 +58,7 @@ $storage_location = $row['storage_location'];
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="form-area">  
-                    <form role="form" method="post">
+                    <form role="form" method="post" action="#">
                         <br style="clear:both">
                         <h3 style="margin-bottom: 25px; text-align: center;">Profile Settings</h3>
                         <div class="form-group">
@@ -67,13 +68,20 @@ $storage_location = $row['storage_location'];
                             <input type="text" class="form-control" id="storage_location" name="storage_location" placeholder="Storage Location" value="<?php echo $storage_location ?>" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="product_type" name="storage_product_type" placeholder="Product Type" required>
+                            <select class="form-control" id="product_type" name="storage_product_type" placeholder="Product Type" required>
+                                <option>Egg</option>
+                                <option>Vegetable</option>
+                                <option>Chicken</option>
+                                <option>Fish</option>
+                                <option>Fruit</option>
+                                <option>Meat</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="payment" name="storage_payment" placeholder="Payment/KG" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="contact" name="storage_contact" placeholder="Contact" required>
+                            <input type="text" class="form-control" id="contact" name="storage_contact" placeholder="Contact" value="<?php echo $owner_contact ?>" required>
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="storage_capacity" name="storage_capacity" placeholder="Storage Capacity" required>
@@ -114,13 +122,18 @@ if (isset($_POST['form_datasubmit'])) {
     $storage_capacity           = validate_input($_POST['storage_capacity']);
     $storage_temperature        = validate_input($_POST['storage_temperature']);
 
-    //echo $storage_name . " : " . $storage_location . " : " . $storage_product_type . " : " . $storage_payment . " : " . $storage_contact . " : " . $storage_capacity . " : " . $storage_temperature;
+    // echo $storage_name . " : " . $storage_location . " : " . $storage_product_type . " : " . $storage_payment . " : " . $storage_contact . " : " . $storage_capacity . " : " . $storage_temperature;
 
-    $sqlquery2 = "UPDATE `storage_info` SET `product_type`= '$storage_product_type',`payment`='$storage_payment',`contact`='$storage_contact',`storage_capacity`='$storage_capacity',`storage_temperature`='$storage_temperature' WHERE `storage_name`='$storage_name2' AND `storage_location`='$storage_location2'";
-    $result2 = mysqli_query($dbconnect, $sqlquery2);
-    if ($result2) {
-        echo "<script>document.getElementById('success').innerHTML = 'Profile Updated.'</script>";
+    if ($storage_name == $storage_name2 && $storage_location == $storage_location2) {
+        $sqlquery2 = "UPDATE `storage_info` SET `product_type` = '$storage_product_type',`payment` = '$storage_payment',`contact` = '$storage_contact',`storage_capacity` = '$storage_capacity',`storage_temperature` = '$storage_temperature' WHERE `storage_name` = '$storage_name2' AND `storage_location` = '$storage_location2'";
+        $result2 = mysqli_query($dbconnect, $sqlquery2);
+        echo $result2;
+        if ($result2) {
+            echo "<script>document.getElementById('success').innerHTML = 'Profile Updated.'</script>";
+        } else {
+            echo "<script>document.getElementById('error').innerHTML = 'Profile Updated failed.'</script>";
+        }
     } else {
-        echo "<script>document.getElementById('error').innerHTML = 'Profile Updated failed.'</script>";
+        echo "<script>document.getElementById('error').innerHTML = 'Storage Not Found.'</script>";
     }
 }

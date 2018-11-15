@@ -923,16 +923,13 @@ body.mobile-nav-active #mobile-nav-toggle {
     color: white;
     border-radius: 0 5px 5px 0;
 }
-
 #mySidenav a:hover {
     left: 0;
 }
-
 #client {
     top: 20px;
     background-color: #4CAF50;
 }
-
 #owner {
     top: 80px;
     background-color: #2196F3;

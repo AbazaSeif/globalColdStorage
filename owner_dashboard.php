@@ -1,9 +1,31 @@
 <?php
 session_start();
+require 'dbhelper.php';
+require 'dbconnection.php';
 if (!isset($_SESSION['owner_login'])) {
 	header('Location: index.php');
 	exit();
 }
+$owner_email = $_SESSION['owner_login'];
+$owner_id = own_id_email($owner_email, $dbconnect);
+//echo $owner_email . " : " . $owner_id;
+
+$booking_info = array();
+$sqlquery1 = "SELECT `booking_id`, `client_id`, `owner_id`, `storage_id`, `storage_location`, `booking_space`, `total_bill` FROM `booking` WHERE `owner_id` = '$owner_id'";
+if ($result1 = $dbconnect->query($sqlquery1)) {
+    while ($info_rows = $result1->fetch_array(MYSQLI_ASSOC)) {
+        $booking_info[] = $info_rows;
+    }
+    $result1->close();
+}
+$totalSpace = 0;
+$bookarrylen = count($booking_info);
+foreach ($booking_info as $info_row) {
+    $totalSpace         += $info_row['booking_space'];
+    $storage_location   = $info_row['storage_location'];
+}
+$spaceleft = storage_capacity($storage_location, $dbconnect) - $totalSpace;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +33,7 @@ if (!isset($_SESSION['owner_login'])) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Client Dashboard</title>
+    <title>Owner Dashboard</title>
     <link href="img/gcs.ico" rel="shortcut icon">
 
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -19,10 +41,10 @@ if (!isset($_SESSION['owner_login'])) {
 
     <!-- Custom styles for this template -->
     <link href="css/ownerdashboard.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/dash.css" rel="stylesheet">
 </head>
-
 <body>
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -43,7 +65,6 @@ if (!isset($_SESSION['owner_login'])) {
             </div>
         </div>
     </nav>
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
@@ -68,130 +89,66 @@ if (!isset($_SESSION['owner_login'])) {
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <h1 class="page-header">Owner Dashboard</h1>
+                <div class="row placeholders">
+                    
+                    <div class="col-md-4">
+                        <div class="dash-box dash-box-color-1">
+                            <div class="dash-box-icon">
+                                <i class="glyphicon glyphicon-cloud"></i>
+                            </div>
+                            <div class="dash-box-body">
+                                <span class="dash-box-title">Total Client</span>
+                                <span class="dash-box-count"><?php echo $bookarrylen; ?></span>
+                            </div>           
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dash-box dash-box-color-2">
+                            <div class="dash-box-icon">
+                                <i class="glyphicon glyphicon-download"></i>
+                            </div>
+                            <div class="dash-box-body">
+                                <span class="dash-box-title">Space Booked</span>
+                                <span class="dash-box-count"><?php echo $totalSpace . "KG"; ?></span>
+                            </div>          
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dash-box dash-box-color-3">
+                            <div class="dash-box-icon">
+                                <i class="glyphicon glyphicon-heart"></i>
+                            </div>
+                            <div class="dash-box-body">
+                                <span class="dash-box-title">Space Left</span>
+                                <span class="dash-box-count"><?php echo $spaceleft . "KG"; ?></span>
+                            </div>           
+                        </div>
+                    </div>
+
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Header</th>
-                                <th>Header</th>
-                                <th>Header</th>
-                                <th>Header</th>
+                                <th>Client Name</th>
+                                <th>Storage Name</th>
+                                <th>Storage Location</th>
+                                <th>Booked Space</th>
+                                <th>Total Bill</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1,001</td>
-                                <td>Lorem</td>
-                                <td>ipsum</td>
-                                <td>dolor</td>
-                                <td>sit</td>
-                            </tr>
-                            <tr>
-                                <td>1,002</td>
-                                <td>amet</td>
-                                <td>consectetur</td>
-                                <td>adipiscing</td>
-                                <td>elit</td>
-                            </tr>
-                            <tr>
-                                <td>1,003</td>
-                                <td>Integer</td>
-                                <td>nec</td>
-                                <td>odio</td>
-                                <td>Praesent</td>
-                            </tr>
-                            <tr>
-                                <td>1,003</td>
-                                <td>libero</td>
-                                <td>Sed</td>
-                                <td>cursus</td>
-                                <td>ante</td>
-                            </tr>
-                            <tr>
-                                <td>1,004</td>
-                                <td>dapibus</td>
-                                <td>diam</td>
-                                <td>Sed</td>
-                                <td>nisi</td>
-                            </tr>
-                            <tr>
-                                <td>1,005</td>
-                                <td>Nulla</td>
-                                <td>quis</td>
-                                <td>sem</td>
-                                <td>at</td>
-                            </tr>
-                            <tr>
-                                <td>1,006</td>
-                                <td>nibh</td>
-                                <td>elementum</td>
-                                <td>imperdiet</td>
-                                <td>Duis</td>
-                            </tr>
-                            <tr>
-                                <td>1,007</td>
-                                <td>sagittis</td>
-                                <td>ipsum</td>
-                                <td>Praesent</td>
-                                <td>mauris</td>
-                            </tr>
-                            <tr>
-                                <td>1,008</td>
-                                <td>Fusce</td>
-                                <td>nec</td>
-                                <td>tellus</td>
-                                <td>sed</td>
-                            </tr>
-                            <tr>
-                                <td>1,009</td>
-                                <td>augue</td>
-                                <td>semper</td>
-                                <td>porta</td>
-                                <td>Mauris</td>
-                            </tr>
-                            <tr>
-                                <td>1,010</td>
-                                <td>massa</td>
-                                <td>Vestibulum</td>
-                                <td>lacinia</td>
-                                <td>arcu</td>
-                            </tr>
-                            <tr>
-                                <td>1,011</td>
-                                <td>eget</td>
-                                <td>nulla</td>
-                                <td>Class</td>
-                                <td>aptent</td>
-                            </tr>
-                            <tr>
-                                <td>1,012</td>
-                                <td>taciti</td>
-                                <td>sociosqu</td>
-                                <td>ad</td>
-                                <td>litora</td>
-                            </tr>
-                            <tr>
-                                <td>1,013</td>
-                                <td>torquent</td>
-                                <td>per</td>
-                                <td>conubia</td>
-                                <td>nostra</td>
-                            </tr>
-                            <tr>
-                                <td>1,014</td>
-                                <td>per</td>
-                                <td>inceptos</td>
-                                <td>himenaeos</td>
-                                <td>Curabitur</td>
-                            </tr>
-                            <tr>
-                                <td>1,015</td>
-                                <td>sodales</td>
-                                <td>ligula</td>
-                                <td>in</td>
-                                <td>libero</td>
-                            </tr>
+                            <?php
+                                foreach ($booking_info as $info_row) {
+                                    echo "<tr>";
+                                    echo "<td>" . ucfirst(client_name($info_row['client_id'], $dbconnect))  . "</td>";
+                                    echo "<td>" . ucfirst(storage_name($info_row['storage_id'], $dbconnect)) . "</td>";
+                                    echo "<td>" . ucfirst($info_row['storage_location']) . "</td>";
+                                    echo "<td>" . $info_row['booking_space'] . " KG</td>";
+                                    echo "<td>BDT " . $info_row['total_bill'] . "</td>";
+                                    echo "</tr>";
+                                }
+                            ?>
                         </tbody>
                     </table>
                 </div>

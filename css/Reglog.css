@@ -99,11 +99,13 @@ body {
 }
 #error{
     color: red;
-    font-family: bold;
+    font-family: fantasy;
     text-align: center;
+    font-size: 18px;
 }
 #success{
     color: green;
-    font-family: bold;
+    font-family: fantasy;
     text-align: center;
+    font-size: 18px;
 }
