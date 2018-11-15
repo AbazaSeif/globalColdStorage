@@ -1,7 +1,11 @@
 <?php
 session_start();
-if (isset($_SESSION['client_login']) || isset($_SESSION['owner_login'])) {
-	header('Location: index.php');
+if (isset($_SESSION['owner_login'])) {
+	header('Location: owner_dashboard.php');
+	exit();
+}
+if (isset($_SESSION['client_login'])) {
+	header('Location: client_dashboard.php');
 	exit();
 }
 ?>
