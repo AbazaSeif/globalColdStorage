@@ -125,7 +125,7 @@ if (isset($_POST['form_datasubmit'])) {
     // echo $storage_name . " : " . $storage_location . " : " . $storage_product_type . " : " . $storage_payment . " : " . $storage_contact . " : " . $storage_capacity . " : " . $storage_temperature;
 
     if ($storage_name == $storage_name2 && $storage_location == $storage_location2) {
-        $sqlquery2 = "UPDATE `storage_info` SET `product_type` = '$storage_product_type',`payment` = '$storage_payment',`contact` = '$storage_contact',`storage_capacity` = '$storage_capacity',`storage_temperature` = '$storage_temperature' WHERE `storage_name` = '$storage_name2' AND `storage_location` = '$storage_location2'";
+        $sqlquery2 = "UPDATE `storage_info` SET `product_type` = '$storage_product_type',`payment` = '$storage_payment',`contact` = '$storage_contact',`storage_capacity` = '$storage_capacity',`storage_temperature` = '$storage_temperature', `space_booked` = '$storage_capacity' WHERE `storage_name` = '$storage_name2' AND `storage_location` = '$storage_location2'";
         $result2 = mysqli_query($dbconnect, $sqlquery2);
         echo $result2;
         if ($result2) {

@@ -2,6 +2,7 @@
 session_start();
 require 'dbhelper.php';
 require 'dbconnection.php';
+error_reporting(0);
 if (!isset($_SESSION['owner_login'])) {
 	header('Location: index.php');
 	exit();
@@ -26,6 +27,8 @@ foreach ($booking_info as $info_row) {
 }
 $spaceleft = storage_capacity($storage_location, $dbconnect) - $totalSpace;
 
+$totalCap = storage_capacity($storage_location, $dbconnect);
+$parcent = ($totalSpace * 100) / $totalCap;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +61,7 @@ $spaceleft = storage_capacity($storage_location, $dbconnect) - $totalSpace;
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a >Email : <?php echo $_SESSION['owner_login']; ?></a></li>
                     <li><a href="owner_dashboard.php">Dashboard</a></li>
                     <li><a href="owner_setting.php">Settings</a></li>
                     <li><a href="logout.php">Logout</a></li>
@@ -67,7 +71,7 @@ $spaceleft = storage_capacity($storage_location, $dbconnect) - $totalSpace;
     </nav>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3 col-md-2 sidebar">
+            <!-- <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
                     <li><a href="#">Reports</a></li>
@@ -86,7 +90,7 @@ $spaceleft = storage_capacity($storage_location, $dbconnect) - $totalSpace;
                     <li><a href="">One more nav</a></li>
                     <li><a href="">Another nav item</a></li>
                 </ul>
-            </div>
+            </div> -->
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <h1 class="page-header">Owner Dashboard</h1>
                 <div class="row placeholders">
@@ -108,8 +112,12 @@ $spaceleft = storage_capacity($storage_location, $dbconnect) - $totalSpace;
                                 <i class="glyphicon glyphicon-download"></i>
                             </div>
                             <div class="dash-box-body">
-                                <span class="dash-box-title">Space Booked</span>
-                                <span class="dash-box-count"><?php echo $totalSpace . "KG"; ?></span>
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $parcent; ?>%;" data-toggle="tooltip" data-placement="top" title="HTML / HTML5">
+                                    <!-- <span class="sr-only"><?php echo $parcent; ?>%</span> -->
+                                    <span class="progress-type"><?php echo $parcent; ?>%</span>
+                                </div>
+                                <br>
+                                <span class="dash-box-count">Space Booked</span>
                             </div>          
                         </div>
                     </div>
@@ -124,9 +132,9 @@ $spaceleft = storage_capacity($storage_location, $dbconnect) - $totalSpace;
                             </div>           
                         </div>
                     </div>
-
                 </div>
                 <div class="table-responsive">
+                    <h3 class="page-header">Booking History</h3>
                     <table class="table table-striped">
                         <thead>
                             <tr>

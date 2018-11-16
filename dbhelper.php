@@ -72,4 +72,12 @@ function storage_capacity($data, $dbconn) {
     return $str_cap;
 }
 
+function space_booked($data, $dbconn) {
+    $query      = "SELECT `space_booked` FROM `storage_info` WHERE `storage_name` = '$data'";
+    $result     = mysqli_query($dbconn, $query);
+    $row        = mysqli_fetch_assoc($result);
+    $str_bok    = $row['space_booked'];
+    return $str_bok;
+}
+
 ?>

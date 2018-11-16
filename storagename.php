@@ -17,6 +17,7 @@ if (isset($_GET)) {
         $payment        = $rows['payment'];
         $contact        = $rows['contact'];
         $str_cap        = $rows['storage_capacity'];
+        $str_temp       = $rows['storage_temperature'];
     }
 }
 
@@ -97,15 +98,27 @@ if(isset($product_type) == NULL || isset($payment) == NULL || isset($contact) ==
                         <img class="proType" src="img/<?php echo $product_type ?>.png" alt="">
                     </p>
                 </div>
-                <div class="col-md-6 service-item">
-                    <div class="service-icon"><i class="fa fa-money"></i></div>
-                    <h4 class="service-title"><a href="">Payment</a></h4>
-                    <p class="service-description"> BDT <?php echo $payment ?> per month</p>
-                </div>
-                <div class="col-md-6 service-item">
-                    <div class="service-icon"><i class="fa fa-phone-square"></i></div>
-                    <h4 class="service-title"><a href="">Contact</a></h4>
-                    <p class="service-description"><?php echo $contact ?></p>
+                <div class="col-md-6">
+                    <div class="col-md-6 service-item">
+                        <div class="service-icon"><i class="fa fa-money"></i></div>
+                        <h4 class="service-title"><a href="">Payment</a></h4>
+                        <p class="service-description"> BDT <?php echo $payment ?> per KG</p>
+                    </div>
+                    <div class="col-md-6 service-item">
+                        <div class="service-icon"><i class="fa fa-phone-square"></i></div>
+                        <h4 class="service-title"><a href="">Contact</a></h4>
+                        <p class="service-description"><?php echo $contact ?></p>
+                    </div>
+                    <div class="col-md-6 service-item">
+                        <div class="service-icon"><i class="fa fa-money"></i></div>
+                        <h4 class="service-title"><a href="">Capacity</a></h4>
+                        <p class="service-description"><?php echo $str_cap ?> KG</p>
+                    </div>
+                    <div class="col-md-6 service-item">
+                        <div class="service-icon"><i class="fa fa-phone-square"></i></div>
+                        <h4 class="service-title"><a href="">Temperature</a></h4>
+                        <p class="service-description"><?php echo $str_temp ?>°C</p>
+                    </div>
                 </div>
             </div>
         </div>

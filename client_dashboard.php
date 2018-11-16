@@ -49,8 +49,8 @@ sort($storage_info);
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a >Email : <?php echo $_SESSION['client_login']; ?></a></li>
                     <li><a href="client_dashboard.php">Dashboard</a></li>
-                    <li><a href="owner_setting.php">Settings</a></li>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </div>
@@ -115,8 +115,9 @@ if (isset($_POST['form_datasubmit'])) {
 	$required_space 			= $_POST['require_space'];
 
 	// echo $storage_name_book . " : " . $storage_location_book . " : " . $required_space;
-	$chk_name = check_storage_name($storage_name_book, $dbconnect);
-	if ($chk_name) {
+	$chk_name          = check_storage_name($storage_name_book, $dbconnect);
+    echo $chk_name;
+	if ($chk_name == $storage_location_book) {
 		$client_email 	= $_SESSION['client_login'];
 		$client_id 		= client_id($client_email, $dbconnect);
 		$own_id 		= own_id($storage_name_book, $dbconnect);
@@ -124,14 +125,23 @@ if (isset($_POST['form_datasubmit'])) {
 		$payment 		= payment($storage_name_book, $dbconnect);
 		$total_bill 	= $required_space * $payment;
 		// echo $client_email . " : " . $client_id . " : " . $own_id . " : " . $storage_id . " : " . $payment;
-		
-		$sqlquery2 	= "INSERT INTO `booking`(`booking_id`, `client_id`, `owner_id`, `storage_id`, `storage_location`, `booking_space`, `total_bill`) VALUES (NULL,'$client_id','$own_id','$storage_id','$storage_location_book','$required_space','$total_bill')";
-		$result2 	= mysqli_query($dbconnect, $sqlquery2);
-		if ($result2) {
-			echo "<script>document.getElementById('success').innerHTML = 'Storage Booked.'</script>";
-		} else {
-			echo "<script>document.getElementById('success').innerHTML = 'Failed.'</script>";
-		}
+
+        $space_booked = space_booked($storage_name_book, $dbconnect);
+        $space_booked2 = $space_booked - $required_space;
+
+        if ($space_booked2 >= 0) {
+            $sqlquery2  = "INSERT INTO `booking`(`booking_id`, `client_id`, `owner_id`, `storage_id`, `storage_location`, `booking_space`, `total_bill`) VALUES (NULL,'$client_id','$own_id','$storage_id','$storage_location_book','$required_space','$total_bill')";
+            $sqlquery3 = "UPDATE `storage_info` SET `space_booked`='$space_booked2' WHERE `storage_name` = '$storage_name_book'";
+            $result2    = mysqli_query($dbconnect, $sqlquery2);
+            $result3    = mysqli_query($dbconnect, $sqlquery3);
+            if ($result2 && $result3) {
+                echo "<script>document.getElementById('success').innerHTML = 'Storage Booked.'</script>";
+            } else {
+                echo "<script>document.getElementById('success').innerHTML = 'Failed.'</script>";
+            }
+        } else {
+            echo "<script>document.getElementById('error').innerHTML = 'Not Enough Space'</script>";
+        }
 	} else {
 		echo "<script>document.getElementById('error').innerHTML = 'Storage Name with " . $storage_name_book." is not found at " . $storage_location_book . "'</script>";
 	}
