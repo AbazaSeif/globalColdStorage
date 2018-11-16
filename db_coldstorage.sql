@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2018 at 10:37 AM
+-- Generation Time: Nov 16, 2018 at 10:03 AM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 7.0.8
 
@@ -29,11 +29,32 @@ SET time_zone = "+00:00";
 CREATE TABLE `booking` (
   `booking_id` int(11) NOT NULL,
   `client_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
   `storage_id` int(11) NOT NULL,
-  `total_space` varchar(30) NOT NULL,
+  `storage_location` varchar(50) NOT NULL,
   `booking_space` varchar(30) NOT NULL,
   `total_bill` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`booking_id`, `client_id`, `owner_id`, `storage_id`, `storage_location`, `booking_space`, `total_bill`) VALUES
+(1, 2, 2, 2, 'Comilla', '20', 600),
+(2, 2, 7, 7, 'Pabna', '10', 300),
+(3, 2, 1, 1, 'mymensingh', '30', 300),
+(4, 2, 4, 4, 'Narayanganj', '25', 500),
+(5, 2, 5, 5, 'Khulna', '15', 600),
+(6, 2, 3, 3, 'Rangamati', '5', 150),
+(7, 2, 6, 6, 'Bogra', '20', 1600),
+(8, 1, 2, 2, 'Comilla', '50', 1500),
+(9, 1, 7, 7, 'Pabna', '10', 300),
+(10, 1, 1, 1, 'mymensingh', '30', 300),
+(11, 1, 4, 4, 'Narayanganj', '15', 300),
+(12, 1, 5, 5, 'Khulna', '25', 1000),
+(13, 1, 3, 3, 'Rangamati', '35', 1050),
+(14, 1, 6, 6, 'Bogra', '5', 400);
 
 -- --------------------------------------------------------
 
@@ -57,7 +78,13 @@ CREATE TABLE `storage_info` (
 --
 
 INSERT INTO `storage_info` (`storage_id`, `storage_name`, `product_type`, `storage_location`, `payment`, `contact`, `storage_capacity`, `storage_temperature`) VALUES
-(1, 'kkk ltd.', NULL, 'aaaaa', NULL, NULL, NULL, NULL);
+(1, 'imran Ltd.', 'Egg', 'mymensingh', 10, '123456789', '100', '5'),
+(2, 'hadid Ltd.', 'Egg', 'Comilla', 30, 'dadasd', '200', '2'),
+(3, 'rifat Ltd.', 'Chicken', 'Rangamati', 30, '2345678', '150', '2'),
+(4, 'ina co Ltd.', 'Fish', 'Narayanganj', 20, '12345678', '200', '2'),
+(5, 'kakon Ltd.', 'Fruit', 'Khulna', 40, '23456789', '250', '8'),
+(6, 'utpal Ltd.', 'Meat', 'Bogra', 80, '2345678', '500', '1'),
+(7, 'hero alam Ltd.', 'Chicken', 'Pabna', 30, '2345678', '200', '2');
 
 -- --------------------------------------------------------
 
@@ -78,7 +105,8 @@ CREATE TABLE `storage_reg_client` (
 --
 
 INSERT INTO `storage_reg_client` (`client_id`, `client_name`, `client_contact`, `client_email`, `client_password`) VALUES
-(1, 'imran', '123456789', 'imran@hadid.com', '$2y$10$mONGEF0pQnsVA1FbEuwGXOJl0qTQ4il4wVhpJao1BzqkIyZj6Y6h6');
+(1, 'imran', '234567890', 'imran@hadid.com', '$2y$10$OdRdVSoK3yeRzwBqwkMoZOZlIo2t4fUVnUllt9uJtfQiIB4sS4c6e'),
+(2, 'hadid', '987643456789', 'hadid@imran.com', '$2y$10$BoqgluRtTOojl267I4CUUO2eiQBP2/ifzP864RTPHb4udeMPXZqVm');
 
 -- --------------------------------------------------------
 
@@ -102,7 +130,13 @@ CREATE TABLE `storage_reg_owner` (
 --
 
 INSERT INTO `storage_reg_owner` (`storage_id`, `storage_name`, `storage_location`, `own_id`, `owner_name`, `owner_email`, `owner_password`, `owner_contact`) VALUES
-(1, 'kkk ltd.', 'aaaaa', 1, 'imran', 'admin@example.com', '$2y$10$Ch/Vs1sfRadZIcsgKkbl9OGPw58qbcqteDu7YAU3MNfZOr2BucxXm', '23456789');
+(1, 'imran Ltd.', 'mymensingh', 1, 'Imran', 'imran@hadid.com', '$2y$10$2xXEn9WtVyXGjX5uTBwjvOrqoLqlvXR3c2DxSLLHppMkYqNZdPK0a', '123456789'),
+(2, 'hadid Ltd.', 'Comilla', 2, 'hadid', 'hadid@imran.com', '$2y$10$UdIQdBR/K0KLBjcCo4wNpOGZiS18DZFfb36Mu6eniUVF1JI/JMY4.', '12345678'),
+(3, 'rifat Ltd.', 'Rangamati', 3, 'rifat', 'rifat@imran.com', '$2y$10$rNSF3ztDwVBeIZlO6VxrUeDOvN8rqRCUhrD03lCcQ9PzjxB5f85P6', '2345678'),
+(4, 'ina co Ltd.', 'Narayanganj', 4, 'ina', 'ina@yat.com', '$2y$10$vjp1cn.uGREPBuu8ByIh.OoUldRDkLfGFAyYHWDsaFu5GZ0iNNDVK', '12345678'),
+(5, 'kakon Ltd.', 'Khulna', 5, 'kakon', 'kakon@k.com', '$2y$10$PfNpyJdI4Wv800DZ1/4euOnk7y7kOt3uDfTdTXmiYyTeXDytDZUs2', '23456789'),
+(6, 'utpal Ltd.', 'Bogra', 6, 'Utpal', 'utpal@das.com', '$2y$10$p6t7ww4PJU6aKyiD4xVZueDgS9oZolwF7VlUU9jj/vTj5ERS1lp.6', '2345678'),
+(7, 'hero alam Ltd.', 'Pabna', 7, 'Hero alam', 'hero@alam.com', '$2y$10$3AJObq5n2FWG1VrdEIkbK.vqW9KHl7ZUF.ZGqeCQHEtuNAN.NJttO', '2345678');
 
 --
 -- Indexes for dumped tables
@@ -142,22 +176,22 @@ ALTER TABLE `storage_reg_owner`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `storage_info`
 --
 ALTER TABLE `storage_info`
-  MODIFY `storage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `storage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `storage_reg_client`
 --
 ALTER TABLE `storage_reg_client`
-  MODIFY `client_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `client_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `storage_reg_owner`
 --
 ALTER TABLE `storage_reg_owner`
-  MODIFY `own_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `own_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- Constraints for dumped tables
 --
