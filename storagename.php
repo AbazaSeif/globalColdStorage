@@ -7,23 +7,24 @@ if (isset($_GET['name']) == '') {
     exit();
 }
 
-$storage_info = array();
-$location = mysqli_real_escape_string($dbconnect, $_GET['name']);
-//$sqlquery1 = "SELECT `storage_name`, `contact` FROM `storage_info`";
-$sqlquery1 = "SELECT `storage_name`, `contact` FROM `storage_info` WHERE `storage_location` = '$location'";
-if ($result1 = $dbconnect->query($sqlquery1)) {
-    while ($info_rows = $result1->fetch_array(MYSQLI_ASSOC)) {
-        $storage_info[] = $info_rows;
+if (isset($_GET)) {
+    $str_name = mysqli_real_escape_string($dbconnect, $_GET['name']);
+    $sqlQuery = "SELECT * FROM `storage_info` WHERE `storage_name` = '$str_name'";
+    $result= mysqli_query($dbconnect, $sqlQuery);
+    $rows = mysqli_fetch_assoc($result);
+    if ($rows) {
+        $product_type   = $rows['product_type'];
+        $payment        = $rows['payment'];
+        $contact        = $rows['contact'];
+        $str_cap        = $rows['storage_capacity'];
     }
-    $result1->close();
 }
 
-$arrstr_info = count($storage_info);
-
-if($arrstr_info == 0){
+if(isset($product_type) == NULL || isset($payment) == NULL || isset($contact) == NULL || isset($str_cap) == NULL){
     header('location: error.php');
 }
 
+//echo $product_type . " : " . $payment . " : " . $contact . " : " . $str_cap;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +33,9 @@ if($arrstr_info == 0){
     <meta charset="utf-8">
     <title>Global Cold Storage</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
     <link href="img/gcs.ico" rel="shortcut icon">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
@@ -81,24 +85,28 @@ if($arrstr_info == 0){
         <div class="container wow fadeInUp">
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="section-title">Storage Location : <?php echo $location; ?></h3>
-                    <h3 class="text-center"><?php echo $arrstr_info . " cold storage found in " . $location; ?> </h3>
+                    <h3 class="section-title">Storage Name : <?php echo $str_name; ?></h3>
                     <div class="section-title-divider"></div>
                 </div>
             </div>
-                    
+
             <div class="row">
-                
-                <?php
-                    foreach ($storage_info as $info_row) {
-                        echo '<div class="panel panel-default panel-horizontal">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">'. $info_row['storage_name'].'</h3>
-                                </div>';
-                        echo '<div class="panel-body"> Contact Info : '. $info_row['contact'].' <a href="storagename.php?name='.$info_row['storage_name'].'">View Details</a></div>
-                            </div>';
-                    }
-                ?>
+                <div class="col-md-6 service-item">
+                    <h4 class="service-title"><a href="">Type of product you can store : <?php echo $product_type ?></a></h4>
+                    <p class="service-description">
+                        <img class="proType" src="img/<?php echo $product_type ?>.png" alt="">
+                    </p>
+                </div>
+                <div class="col-md-6 service-item">
+                    <div class="service-icon"><i class="fa fa-money"></i></div>
+                    <h4 class="service-title"><a href="">Payment</a></h4>
+                    <p class="service-description"> BDT <?php echo $payment ?> per month</p>
+                </div>
+                <div class="col-md-6 service-item">
+                    <div class="service-icon"><i class="fa fa-phone-square"></i></div>
+                    <h4 class="service-title"><a href="">Contact</a></h4>
+                    <p class="service-description"><?php echo $contact ?></p>
+                </div>
             </div>
         </div>
     </section>
