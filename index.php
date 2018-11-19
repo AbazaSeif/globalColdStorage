@@ -57,9 +57,6 @@
         <a href="owner_reg.php" id="owner">Owner Login/Registration</a>
     </div>
 
-    <!--==========================
-    Hero Section
-    ============================-->
     <section id="hero">
         <div class="hero-container">
             <div class="wow fadeIn">
@@ -68,6 +65,14 @@
 
                 <div class="row">
                     <div class="col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 mt-2">
+                        <form class="search-box" method="post" action="#">
+                            <select class="form-control" id="search_type" name="search_type" placeholder="Search Type" onBlur="checkSearchType()" required>
+                                <option value="1">Search By Product Type</option>
+                                <option value="2">Search By Location</option>
+                            </select>
+                            <div class="result" id="result"></div>
+                        </form>
+                        <br>
                         <form class="input-group search-box" method="post" action="#">
                             <input type="text" class="form-control" name="searchlocation" autocomplete="off" placeholder="Search for Cold Storage...">
                             <div class="result"></div>
@@ -81,9 +86,6 @@
         </div>
     </section>
 
-    <!--==========================
-    Header Section
-    ============================-->
     <header id="header">
         <div class="container">
 
@@ -100,11 +102,7 @@
             <!-- #nav-menu-container -->
         </div>
     </header>
-    <!-- #header -->
 
-    <!--==========================
-    About Section
-    ============================-->
     <section id="about">
         <div class="container wow fadeInUp">
             <div class="row">
@@ -154,13 +152,26 @@
 
     <!-- Template Specisifc Custom Javascript File -->
     <script src="js/custom.js"></script>
+    <script>
+        function checkSearchType() {
+            jQuery.ajax({
+                url: "searchType.php",
+                data:'searchtype='+$("#search_type").val(),
+                type: "POST",
+                success:function(data){
+                    $("#result").html(data);
+                },
+                error:function (){}
+            });
+        }
+    </script>
 </body>
 </html>
 <?php
 
 if (isset($_POST['search_btn'])) {
     $searchlocation = $_POST['searchlocation'];
-    echo "<script>javascript:document.location='storagelocation.php?name=".$searchlocation."'</script>";
+    echo "<script>javascript:document.location='storageinfo.php?name=".$searchlocation."'</script>";
 }
 
 ?>
