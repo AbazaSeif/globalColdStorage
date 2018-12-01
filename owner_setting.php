@@ -1,4 +1,4 @@
-<?php
+ <?php
 session_start();
 require 'dbconnection.php';
 if (!isset($_SESSION['owner_login'])) {
@@ -62,10 +62,10 @@ $owner_contact      = $row['owner_contact'];
                         <br style="clear:both">
                         <h3 style="margin-bottom: 25px; text-align: center;">Profile Settings</h3>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="storage_name" name="storage_name" placeholder="Storage Name" value="<?php echo $storage_name ?>" required>
+                            <input type="text" class="form-control" id="storage_name" name="storage_name" placeholder="Storage Name" value="<?php echo ucfirst($storage_name) ?>" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="storage_location" name="storage_location" placeholder="Storage Location" value="<?php echo $storage_location ?>" required>
+                            <input type="text" class="form-control" id="storage_location" name="storage_location" placeholder="Storage Location" value="<?php echo ucfirst($storage_location) ?>" required>
                         </div>
                         <div class="form-group">
                             <select class="form-control" id="product_type" name="storage_product_type" placeholder="Product Type" required>
